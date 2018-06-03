@@ -10,6 +10,8 @@ bool first_turn();
 int ai_move(const int [8][3], char[9], char);
 bool is_game_end(const int [8][3], char[9], char);
 int get_human_move();
+void printX(int, int);
+void printO(int, int);
 
 int main(int argc, char **argv)
 {
@@ -57,24 +59,55 @@ int main(int argc, char **argv)
 }
 
 void print_board(char board[9]){
-    char digits[9] = {};
-    for (int  i = 0; i < 9; i++){
-        if (board[i] == ' ') digits[i] = char(i+49);
-        else digits[i] = board[i];
-    }
-    printf("\n|-+-+-|\n");
-    printf("|%c+%c+%c|\n", digits[0],  digits[1], digits[2]);
-    printf("|-+-+-|\n");
-    printf("|%c+%c+%c|\n", digits[3],  digits[4], digits[5]);
-    printf("|-+-+-|\n");
-    printf("|%c+%c+%c|\n", digits[6],  digits[7], digits[8]);
-    printf("|-+-+-|\n\n");  
+    
+    int cursor_coord [9][2] = {
+        {0, 1},
+        {8, 1},
+        {17, 1},
+        {0, 8},
+        {9, 8},
+        {17, 8},
+        {0, 15},
+        {9, 15},
+        {17, 15},
+    };
     
     COORD position;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    position.X = 0;
+    position.X = 1;
     position.Y = 1;
     SetConsoleCursorPosition(hConsole, position);
+    
+    printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@\n"
+           "@ __     @ ___    @ ____  @\n"
+           "@/_ |    @|__ \\   @|___ \\ @\n"
+           "@ | |    @   ) |  @  __) |@\n"
+           "@ | |    @  / /   @ |__ < @\n"
+           "@ | |    @ / /_   @ ___) |@\n"
+           "@ |_|    @|____|  @|____/ @\n"
+           "@@@@@@@@@@@@@@@@@@@@@@@@@@@\n"
+           "@ _  _   @ _____  @   __  @\n"
+           "@| || |  @| ____| @  / /  @\n"
+           "@| || |_ @| |__   @ / /_  @\n"
+           "@|__   _|@|___ \\  @| '_ \\ @\n"
+           "@   | |  @ ___) | @| (_)| @\n"
+           "@   |_|  @|____/  @ \\___/ @\n"
+           "@@@@@@@@@@@@@@@@@@@@@@@@@@@\n"
+           "@ ______ @  ___   @  ___  @\n"
+           "@|____  |@ / _ \\  @ / _ \\ @\n"
+           "@    / / @| (_) | @| (_) |@\n"
+           "@   / /  @ > _ <  @ \\__, |@\n"
+           "@  / /   @| (_) | @   / / @\n"
+           "@ /_/    @ \\___/  @  /_/  @\n"
+           "@@@@@@@@@@@@@@@@@@@@@@@@@@@\n"
+    );
+    int x, y;
+    for (int i = 0; i < 9; i++){
+        x = cursor_coord[i][0];
+        y = cursor_coord[i][1];
+        if (board[i] == 'X') printX(x, y);
+        if (board[i] == 'O') printO(x, y);
+    }
 }
 
 bool first_turn(){
@@ -128,7 +161,7 @@ bool is_game_end(const int a[8][3], char board[9], char human){
     COORD position;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     position.X = 0;
-    position.Y = 9;
+    position.Y = 25;
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 3; j++){
             if(board[a[i][j]] == human) human_win++;
@@ -162,4 +195,51 @@ int get_human_move(){
     int button = getch();
     button -= 49;
     return button;
+}
+
+void printX(int x, int y){
+    
+    char* letter_X[8] = {"@@@@@@@@@\n",
+           "@__   __ @\n",
+           "@\\ \\ / / @\n",
+           "@ \\ V /  @\n",
+           "@  > <   @\n",
+           "@ / . \\  @\n",
+           "@/_/ \\_\\ @\n",
+           "@@@@@@@@@\n"
+    };
+    COORD position;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    position.X = x;
+    position.Y = y;
+    SetConsoleCursorPosition(hConsole, position);
+    for (int i = 0; i < 8; i++){
+        printf("%s", letter_X[i]);
+        position.Y++;
+        SetConsoleCursorPosition(hConsole, position);
+    }
+}
+
+void printO(int x, int y){
+    char* letter_O[8]  = {  
+        "@@@@@@@@@\n",
+        "@  ___   @\n",
+        "@ / _ \\  @\n",
+        "@| | | | @\n",
+        "@| | | | @\n",
+        "@| |_| | @\n",
+        "@ \\___/  @\n",
+        "@@@@@@@@@\n"
+    };
+    
+    COORD position;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    position.X = x;
+    position.Y = y;
+    SetConsoleCursorPosition(hConsole, position);
+    for (int i = 0; i < 8; i++){
+        printf("%s", letter_O[i]);
+        position.Y++;
+        SetConsoleCursorPosition(hConsole, position);
+    }
 }
